@@ -5,9 +5,8 @@ const app = express();
 app.use(express.json());
 
 // Routes akan diimpor dan digunakan di sini
-app.get("/", (req, res) => {
-  res.send(`Server running on port ${PORT}`);
-});
+const router = require("./router/index");
+app.use(router); // Aktifkan semua route
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
