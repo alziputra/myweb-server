@@ -2,31 +2,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("Portfolios", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
+      user_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Users", // Nama tabel yang direferensikan
+          key: "id", // Kolom yang direferensikan
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
-      bio: {
+      title: {
+        type: Sequelize.STRING,
+      },
+      description: {
         type: Sequelize.STRING,
       },
       image: {
         type: Sequelize.STRING,
       },
-      email: {
+      project_url: {
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -38,7 +41,8 @@ module.exports = {
       },
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("Portfolios");
   },
 };
