@@ -9,6 +9,6 @@ route.get("/", (req, res) => {
 });
 
 route.use("/users", usersRoute);
-router.use('/portfolios', portfolioRouter);
+route.use("/portfolios", portfolioRouter);
 
 module.exports = route;

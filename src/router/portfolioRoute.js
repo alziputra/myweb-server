@@ -8,3 +8,5 @@ router.get("/:id", PortfolioController.getPortfolioById);
 router.post("/", PortfolioController.addPortfolio);
 router.put("/:id", PortfolioController.editPortfolio);
 router.delete("/:id", PortfolioController.deletePortfolio);
+
+module.exports = router;

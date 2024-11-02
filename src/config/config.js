@@ -8,6 +8,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    logging: false, // Nonaktifkan log SQL
   },
   test: {
     username: process.env.DB_USER,
@@ -16,6 +17,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    logging: false, // Nonaktifkan log SQL
   },
   production: {
     username: process.env.DB_USER,
@@ -24,5 +26,6 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    logging: false, // Nonaktifkan log SQL
   },
 };
