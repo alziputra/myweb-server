@@ -64,21 +64,25 @@ const addPortfolio = async (req, res) => {
 
 // Mengedit portofolio
 const editPortfolio = async (req, res) => {
+  const { id } = req.params;
   const { user_id, title, description, image, project_url } = req.body;
 
-  // Validasi input wajib
-  if (!user_id || !title || !description || !image || !project_url) {
-    return res.status(400).json({
-      message: "Fields 'user_id', 'title', 'description', 'image', and 'project_url' are required",
-    });
-  }
-
   try {
-    const updatedPortfolio = await Portfolio.update({ user_id, title, description, image, project_url }, { where: { id: req.params.id } });
-    if (!updatedPortfolio) return res.status(404).json({ error: "Portfolio not found" });
-    res.status(200).json({ message: "Portfolio successfully updated" });
+    // Cari portfolio berdasarkan ID
+    const portfolio = await Portfolio.findByPk(id);
+    if (!portfolio) {
+      return res.status(404).json({ error: "Portfolio not found" });
+    }
+
+    // Update data portfolio
+    await portfolio.update({ user_id, title, description, image, project_url });
+
+    res.status(200).json({
+      message: "Portfolio updated successfully",
+      data: portfolio,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to update portfolio" });
+    res.status(500).json({ error: "Failed to update portfolio", details: error.message });
   }
 };
 
