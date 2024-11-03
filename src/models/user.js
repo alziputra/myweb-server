@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         onDelete: "CASCADE",
       });
+
+      // Relasi One-to-Many: User memiliki banyak BlogPost
+      User.hasMany(models.BlogPost, {
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+      });
     }
 
     // Buat method untuk memeriksa password
