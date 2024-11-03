@@ -22,6 +22,7 @@ const uploadImage = async (file) => {
   // Pindahkan file ke lokasi tujuan dengan nama baru
   await file.mv(filePath);
 
+  // Kembalikan nama file saja, bukan path lengkap
   return newFileName;
 };
 
