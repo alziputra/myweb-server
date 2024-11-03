@@ -55,23 +55,17 @@ const getPortfolioById = async (req, res) => {
 };
 
 // Menambahkan portofolio
-const addPortfolio = async (req, res) => {  
+const addPortfolio = async (req, res) => {
   const { user_id, title, description, project_url } = req.body;
-
-  if (!user_id || !title || !description || !project_url) {
-    return res.status(400).json({
-      message: "All fields are required",
-    });
-  }
 
   let imagePath = null;
   if (req.files && req.files.image) {
     const file = req.files.image;
 
-    // Cek apakah file terpotong karena melebihi batas ukuran
-    if (file.truncated) {
+    // Cek ukuran file maksimal 500 KB
+    if (file.size > 500 * 1024) {
       return res.status(400).json({
-        message: "File size exceeds the limit and was truncated. Please upload a smaller file.",
+        message: "File size exceeds the 500 KB limit. Please upload a smaller file.",
       });
     }
 
@@ -147,9 +141,10 @@ const editPortfolio = async (req, res) => {
     if (req.files && req.files.image) {
       const file = req.files.image;
 
-      if (file.truncated) {
+      // Cek ukuran file maksimal 500 KB
+      if (file.size > 500 * 1024) {
         return res.status(400).json({
-          message: "File size exceeds the limit and was truncated. Please upload a smaller file.",
+          message: "File size exceeds the 500 KB limit. Please upload a smaller file.",
         });
       }
 
@@ -157,14 +152,23 @@ const editPortfolio = async (req, res) => {
         const fileExtension = path.extname(file.name);
         const newFileName = `${Date.now()}${fileExtension}`;
         const uploadDir = path.join(__dirname, "../uploads");
-        const imagePath = path.join(uploadDir, newFileName);
+        const newImagePath = path.join(uploadDir, newFileName);
 
+        // Hapus foto lama jika ada
+        if (portfolio.image) {
+          const oldImagePath = path.join(uploadDir, portfolio.image);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath); // Hapus foto lama
+          }
+        }
+
+        // Pastikan direktori upload ada, jika tidak, buat
         if (!fs.existsSync(uploadDir)) {
           fs.mkdirSync(uploadDir, { recursive: true });
         }
 
-        await file.mv(imagePath);
-        portfolio.image = newFileName; // Simpan nama file baru ke database
+        await file.mv(newImagePath);
+        portfolio.image = newFileName; // Simpan nama file baru di database
       } catch (error) {
         return res.status(500).json({
           message: "Failed to upload image",
@@ -173,6 +177,7 @@ const editPortfolio = async (req, res) => {
       }
     }
 
+    // Update data lainnya
     portfolio.user_id = user_id || portfolio.user_id;
     portfolio.title = title || portfolio.title;
     portfolio.description = description || portfolio.description;

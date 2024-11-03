@@ -1,5 +1,5 @@
 const Hashids = require("hashids");
-const hashids = new Hashids(process.env.HASHIDS_SALT || "your-salt-string", 10); // Salt dan panjang hash minimum
+const hashids = new Hashids(process.env.HASHIDS_SALT, 10); // Salt dan panjang hash minimum
 
 // Fungsi untuk mengenkripsi ID numerik
 const encodeId = (id) => {
